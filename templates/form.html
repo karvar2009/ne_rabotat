@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form action="" method="POST">
+        <div>
+            <label for="">
+                Твой язык:
+                <input type="text" id="lang" name="lang">
+            </label>
+        </div>
+        <div>
+            <label for="">
+                Длина твоего языка:
+                <input type="text" id="width" name="width">
+            </label>
+        </div>
+        <input type="submit" value="Отправить">
+    </form>
+    {% if context %}
+        <p>{{ context[0] }}</p>
+        <p>{{ context[1] }}</p>
+    {% endif %}
+{% endblock %}
