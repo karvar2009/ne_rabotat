@@ -1,15 +1,28 @@
 from app import app
 from flask import request, render_template
+import datetime
+import requests
 
 
 @app.route('/')
 def index():
-    user_agent = request.headers.get('User-Agent')
-    menu = [
-        {'name': 'Главная', 'url': index},
-        {'name': 'Я на ТыТруба', 'url': 'https://www.youtube.com/channel/UC6zzr4UN1ECuaOP66TTuNHw'}
-    ]
-    return render_template('base.html', context=menu)
+    return render_template('index.html', current_time=datetime.datetime.utcnow())
+
+
+@app.route('/github-search', methods=['GET', 'POST'])
+def github_search():
+    if request.method == 'POST':
+        lang = request.form.get('lang')
+        sort = request.form.get('sort')
+        url = 'api.github.com/search/repositories'
+        parameters = {
+            'q': f'language:{lang}',
+            'sort': f'sort={sort}'
+        }
+        response = requests.get(url, parameters)
+        response_json = response.json()
+        result = response_json['items']
+        return render_template('github.html', repositories=result)
 
 
 @app.route('/user/<username>')
@@ -29,8 +42,8 @@ def query_example():
 @app.route('/form-example', methods=['GET', 'POST'])
 def form_example():
     if request.method == 'POST':
-        lang = request.args.get('lang')
-        width = request.args.get('width')
+        lang = request.form.get('lang')
+        width = request.form.get('width')
         print(lang)
         print(width)
         return render_template('form.html', context=[lang, width])

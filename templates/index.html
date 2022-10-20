@@ -2,4 +2,9 @@
 
 {% block content %}
     <h1>Привет, {{ url_for('user', username='PON') }}. я пока-что пустая страница</h1>
+    <h3>Сейчас {{ moment(current_time).format('LLL') }}</h3>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
 {% endblock %}
